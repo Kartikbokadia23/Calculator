@@ -10,111 +10,111 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    double input1 = 0, input2 = 0;
-    private int[] numericButtons = {R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9};
-    private TextView edt1;
-    private Button buttonAdd, buttonSub, buttonMul, buttonDivision, buttonEqual, buttonDel, buttonDot, Remainder;
-    boolean Addition, Subtract, Multiplication, Division, mRemainder, decimal;
+    double value1 = 0, value2 = 0;
+    private int[] numericButtons = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5, R.id.button_6, R.id.button_7, R.id.button_8, R.id.button_9};
+    private TextView editTextScreen;
+    private Button buttonAdd, buttonSub, buttonMul, buttonDivision, buttonEqual, buttonDel, buttonDot, buttonRemainder;
+    boolean addition, subtract, multiplication, division, remainder, decimal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setNumericOnClickListener();
-        edt1 = (TextView) findViewById(R.id.display);
-        buttonDot = (Button) findViewById(R.id.buttonDot);
-        buttonAdd = (Button) findViewById(R.id.buttonadd);
-        buttonSub = (Button) findViewById(R.id.buttonsub);
-        buttonMul = (Button) findViewById(R.id.buttonmul);
-        buttonDivision = (Button) findViewById(R.id.buttondiv);
-        Remainder = (Button) findViewById(R.id.Remainder);
-        buttonDel = (Button) findViewById(R.id.buttonDel);
-        buttonEqual = (Button) findViewById(R.id.buttoneql);
+        editTextScreen = (TextView) findViewById(R.id.textView_display);
+        buttonDot = (Button) findViewById(R.id.button_dot);
+        buttonAdd = (Button) findViewById(R.id.button_add);
+        buttonSub = (Button) findViewById(R.id.button_subtract);
+        buttonMul = (Button) findViewById(R.id.button_multiply);
+        buttonDivision = (Button) findViewById(R.id.button_divide);
+        buttonRemainder = (Button) findViewById(R.id.button_remainder);
+        buttonDel = (Button) findViewById(R.id.button_delete);
+        buttonEqual = (Button) findViewById(R.id.button_equal);
 
 
 
 
         buttonAdd.setOnClickListener(v -> {
-            if (edt1.getText().length() != 0) {
-                input1 = Float.parseFloat(edt1.getText() + "");
-                Addition = true;
+            if (editTextScreen.getText().length() != 0) {
+                value1 = Float.parseFloat(editTextScreen.getText() + "");
+                addition = true;
                 decimal = false;
-                edt1.setText(null);
+                editTextScreen.setText(null);
             }
         });
 
         buttonSub.setOnClickListener(v -> {
-            if (edt1.getText().length() != 0) {
-                input1 = Float.parseFloat(edt1.getText() + "");
-                Subtract = true;
+            if (editTextScreen.getText().length() != 0) {
+                value1 = Float.parseFloat(editTextScreen.getText() + "");
+                subtract = true;
                 decimal = false;
-                edt1.setText(null);
+                editTextScreen.setText(null);
             }
         });
 
         buttonMul.setOnClickListener(v -> {
-            if (edt1.getText().length() != 0) {
-                input1 = Float.parseFloat(edt1.getText() + "");
-                Multiplication = true;
+            if (editTextScreen.getText().length() != 0) {
+                value1 = Float.parseFloat(editTextScreen.getText() + "");
+                multiplication = true;
                 decimal = false;
-                edt1.setText(null);
+                editTextScreen.setText(null);
             }
         });
 
         buttonDivision.setOnClickListener(v -> {
-            if (edt1.getText().length() != 0) {
-                input1 = Float.parseFloat(edt1.getText() + "");
-                Division = true;
+            if (editTextScreen.getText().length() != 0) {
+                value1 = Float.parseFloat(editTextScreen.getText() + "");
+                division = true;
                 decimal = false;
-                edt1.setText(null);
+                editTextScreen.setText(null);
             }
         });
 
-        Remainder.setOnClickListener(v -> {
-            if (edt1.getText().length() != 0) {
-                input1 = Float.parseFloat(edt1.getText() + "");
-                mRemainder = true;
+        buttonRemainder.setOnClickListener(v -> {
+            if (editTextScreen.getText().length() != 0) {
+                value1 = Float.parseFloat(editTextScreen.getText() + "");
+                remainder = true;
                 decimal = false;
-                edt1.setText(null);
+                editTextScreen.setText(null);
             }
         });
 
         buttonEqual.setOnClickListener(v -> {
-            if (Addition || Subtract || Multiplication || Division || mRemainder) {
-                input2 = Float.parseFloat(edt1.getText() + "");
+            if (addition || subtract || multiplication || division || remainder) {
+                value2 = Float.parseFloat(editTextScreen.getText() + "");
             }
 
-            if (Addition) {
-                add(input1, input2);
+            if (addition) {
+                add(value1, value2);
             }
 
-            if (Subtract) {
-                subtract(input1, input2);
+            if (subtract) {
+                subtract(value1, value2);
             }
 
-            if (Multiplication) {
-                multiply(input1, input2);
+            if (multiplication) {
+                multiply(value1, value2);
             }
 
-            if (Division) {
-                divide(input1, input2);
+            if (division) {
+                divide(value1, value2);
             }
-            if (mRemainder) {
-                remainder(input1, input2);
+            if (remainder) {
+                remainder(value1, value2);
             }
         });
 
         buttonDel.setOnClickListener(v -> {
-            edt1.setText("");
-            input1 = 0.0;
-            input2 = 0.0;
+            editTextScreen.setText("");
+            value1 = 0.0;
+            value2 = 0.0;
         });
 
         buttonDot.setOnClickListener(v -> {
             if (decimal) {
                 //do nothing or you can show the error
             } else {
-                edt1.setText(edt1.getText() + ".");
+                editTextScreen.setText(editTextScreen.getText() + ".");
                 decimal = true;
             }
 
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Button button = (Button) v;
-                edt1.setText(edt1.getText()+""+(button.getText()));
+                editTextScreen.setText(editTextScreen.getText()+""+(button.getText()));
             }
         };
         for (int id : numericButtons) {
@@ -135,49 +135,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void add(double input1, double input2){
-        edt1.setText(input1 + input2 + "");
+    private void add(double value1, double value2){
+        editTextScreen.setText(value1 + value2 + "");
         StringBuilder result = new StringBuilder();
-        result.append(input1).append(" + ").append(input2).append(" = ").append(input1+input2);
+        result.append(value1).append(" + ").append(value2).append(" = ").append(value1+value2);
         Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
-        Addition = false;
+        addition = false;
     }
 
-    private void subtract(double input1, double input2){
-        edt1.setText(input1 - input2 + "");
+    private void subtract(double value1, double value2){
+        editTextScreen.setText(value1 - value2 + "");
         StringBuilder result = new StringBuilder();
-        result.append(input1).append(" - ").append(input2).append(" = ").append(input1-input2);
+        result.append(value1).append(" - ").append(value2).append(" = ").append(value1-value2);
         Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
-        Subtract = false;
+        subtract = false;
     }
 
-    private void multiply(double input1, double input2){
-        edt1.setText(input1 * input2 + "");
+    private void multiply(double value1, double value2){
+        editTextScreen.setText(value1 * value2 + "");
         StringBuilder result = new StringBuilder();
-        result.append(input1).append(" x ").append(input2).append(" = ").append(input1*input2);
+        result.append(value1).append(" x ").append(value2).append(" = ").append(value1*value2);
         Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
-        Multiplication = false;
+        multiplication = false;
     }
 
-    private void divide(double input1, double input2){
-        if(input2 == 0){
-            edt1.setText("Can't be divided by zero");
+    private void divide(double value1, double value2){
+        if(value2 == 0){
+            editTextScreen.setText("Can't be divided by zero");
             Toast.makeText(getApplicationContext(), "Can't be divided by zero",Toast.LENGTH_LONG).show();
         }
         else{
-            edt1.setText(input1 / input2 + "");
+            editTextScreen.setText(value1 / value2 + "");
             StringBuilder result = new StringBuilder();
-            result.append(input1).append(" / ").append(input2).append(" = ").append(input1/input2);
+            result.append(value1).append(" / ").append(value2).append(" = ").append(value1/value2);
             Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
-            Division = false;
+            division = false;
         }
     }
 
-    private void remainder(double input1, double input2){
-        edt1.setText(input1 % input2 + "");
+    private void remainder(double value1, double value2){
+        editTextScreen.setText(value1 % value2 + "");
         StringBuilder result = new StringBuilder();
-        result.append(input1).append(" % ").append(input2).append(" = ").append(input1%input2);
+        result.append(value1).append(" % ").append(value2).append(" = ").append(value1%value2);
         Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
-        mRemainder = false;
+        remainder = false;
     }
 }
