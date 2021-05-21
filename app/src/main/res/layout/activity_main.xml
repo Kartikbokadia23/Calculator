@@ -256,7 +256,6 @@
             android:layout_margin="1dp"
             android:background="@drawable/button"
             android:layout_weight="0.25"
-            android:onClick="onClick"
             android:text="+"
             android:textColor="#ecf0f1"
             android:textSize="30sp" />
