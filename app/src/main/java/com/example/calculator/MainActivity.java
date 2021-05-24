@@ -10,74 +10,25 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    double value1 = 0, value2 = 0;
+    private double value1 = 0, value2 = 0;
     private int[] numericButtons = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5, R.id.button_6, R.id.button_7, R.id.button_8, R.id.button_9};
     private TextView editTextScreen;
-    private Button buttonAdd, buttonSub, buttonMul, buttonDivision, buttonEqual, buttonDel, buttonDot, buttonRemainder;
-    boolean addition, subtract, multiplication, division, remainder, decimal;
+    private int[] operatorButtons = {R.id.button_add, R.id.button_subtract, R.id.button_multiply, R.id.button_divide, R.id.button_remainder};
+    private Button buttonEqual, buttonDel, buttonDot ;
+    private boolean addition, subtract, multiplication, division, remainder, decimal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setNumericOnClickListener();
+        setOperatorOnClickListener();
         editTextScreen = (TextView) findViewById(R.id.textView_display);
         buttonDot = (Button) findViewById(R.id.button_dot);
-        buttonAdd = (Button) findViewById(R.id.button_add);
-        buttonSub = (Button) findViewById(R.id.button_subtract);
-        buttonMul = (Button) findViewById(R.id.button_multiply);
-        buttonDivision = (Button) findViewById(R.id.button_divide);
-        buttonRemainder = (Button) findViewById(R.id.button_remainder);
         buttonDel = (Button) findViewById(R.id.button_delete);
         buttonEqual = (Button) findViewById(R.id.button_equal);
 
 
-
-
-        buttonAdd.setOnClickListener(v -> {
-            if (editTextScreen.getText().length() != 0) {
-                value1 = Float.parseFloat(editTextScreen.getText() + "");
-                addition = true;
-                decimal = false;
-                editTextScreen.setText(null);
-            }
-        });
-
-        buttonSub.setOnClickListener(v -> {
-            if (editTextScreen.getText().length() != 0) {
-                value1 = Float.parseFloat(editTextScreen.getText() + "");
-                subtract = true;
-                decimal = false;
-                editTextScreen.setText(null);
-            }
-        });
-
-        buttonMul.setOnClickListener(v -> {
-            if (editTextScreen.getText().length() != 0) {
-                value1 = Float.parseFloat(editTextScreen.getText() + "");
-                multiplication = true;
-                decimal = false;
-                editTextScreen.setText(null);
-            }
-        });
-
-        buttonDivision.setOnClickListener(v -> {
-            if (editTextScreen.getText().length() != 0) {
-                value1 = Float.parseFloat(editTextScreen.getText() + "");
-                division = true;
-                decimal = false;
-                editTextScreen.setText(null);
-            }
-        });
-
-        buttonRemainder.setOnClickListener(v -> {
-            if (editTextScreen.getText().length() != 0) {
-                value1 = Float.parseFloat(editTextScreen.getText() + "");
-                remainder = true;
-                decimal = false;
-                editTextScreen.setText(null);
-            }
-        });
 
         buttonEqual.setOnClickListener(v -> {
             if (addition || subtract || multiplication || division || remainder) {
@@ -99,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             if (division) {
                 divide(value1, value2);
             }
+
             if (remainder) {
                 remainder(value1, value2);
             }
@@ -131,6 +83,50 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         for (int id : numericButtons) {
+            findViewById(id).setOnClickListener(listener);
+        }
+    }
+
+    private void setOperatorOnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editTextScreen.getText().length() != 0) {
+                    Button button = (Button) v;
+                    value1 = Float.parseFloat(editTextScreen.getText() + "");
+                    String operator = button.getText()+"";
+                    switch (operator){
+                        case "+":
+                            addition = true;
+                            decimal = false;
+                            editTextScreen.setText(null);
+                            break;
+                        case "-":
+                            subtract = true;
+                            decimal = false;
+                            editTextScreen.setText(null);
+                            break;
+                        case "*":
+                            multiplication = true;
+                            decimal = false;
+                            editTextScreen.setText(null);
+                            break;
+                        case "/":
+                            division = true;
+                            decimal = false;
+                            editTextScreen.setText(null);
+                            break;
+                        case "%":
+                            remainder = true;
+                            decimal = false;
+                            editTextScreen.setText(null);
+                            break;
+
+                    }
+                }
+            }
+        };
+        for (int id : operatorButtons) {
             findViewById(id).setOnClickListener(listener);
         }
     }
