@@ -12,10 +12,9 @@ public class MainActivity extends AppCompatActivity {
 
     private double value1 = 0, value2 = 0;
     private int[] numericButtons = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5, R.id.button_6, R.id.button_7, R.id.button_8, R.id.button_9};
-    private TextView editTextScreen;
+    private TextView textResultScreen, textDisplayScreen;
     private int[] operatorButtons = {R.id.button_add, R.id.button_subtract, R.id.button_multiply, R.id.button_divide, R.id.button_remainder};
-    private Button buttonEqual, buttonDel, buttonDot ;
-    private boolean addition, subtract, multiplication, division, remainder, decimal;
+    private boolean addition, subtract, multiplication, division, remainder, decimal=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +22,71 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setNumericOnClickListener();
         setOperatorOnClickListener();
-        editTextScreen = (TextView) findViewById(R.id.textView_display);
-        buttonDot = (Button) findViewById(R.id.button_dot);
-        buttonDel = (Button) findViewById(R.id.button_delete);
-        buttonEqual = (Button) findViewById(R.id.button_equal);
+        textResultScreen = (TextView) findViewById(R.id.textView_result);
+        textDisplayScreen = (TextView) findViewById(R.id.textView_display);
+    }
+
+    private void setNumericOnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button) v;
+                textResultScreen.setText(textResultScreen.getText()+""+(button.getText()));
+            }
+        };
+        for (int id : numericButtons) {
+            findViewById(id).setOnClickListener(listener);
+        }
+    }
+
+    private void setOperatorOnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textResultScreen.getText().length() != 0) {
+                    Button button = (Button) v;
+                    value1 = (decimal) ? Float.parseFloat(textResultScreen.getText() + "") : Integer.parseInt(textResultScreen.getText() + "");
+                    String operator = button.getText()+"";
+                    textDisplayScreen.setText(value1+" "+button.getText());
+                    switch (operator){
+                        case "+":
+                            addition = true;
+                            decimal = false;
+                            break;
+                        case "-":
+                            subtract = true;
+                            decimal = false;
+                            break;
+                        case "*":
+                            multiplication = true;
+                            decimal = false;
+                            break;
+                        case "/":
+                            division = true;
+                            decimal = false;
+                            break;
+                        case "%":
+                            remainder = true;
+                            decimal = false;
+                            break;
+
+                    }
+                    textResultScreen.setText(null);
+                }
+            }
+        };
+        for (int id : operatorButtons) {
+            findViewById(id).setOnClickListener(listener);
+        }
 
 
-
-        buttonEqual.setOnClickListener(v -> {
-            if (addition || subtract || multiplication || division || remainder) {
-                value2 = Float.parseFloat(editTextScreen.getText() + "");
+        findViewById(R.id.button_equal).setOnClickListener(v -> {
+            if ((addition || subtract || multiplication || division || remainder) && textResultScreen.getText().length() != 0) {
+                value2 = (decimal) ? Float.parseFloat(textResultScreen.getText() + "") : Integer.parseInt(textResultScreen.getText() + "");
+                textDisplayScreen.setText(textDisplayScreen.getText()+" "+value2);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Second value not found",Toast.LENGTH_LONG).show();
             }
 
             if (addition) {
@@ -56,124 +110,62 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonDel.setOnClickListener(v -> {
-            editTextScreen.setText("");
-            value1 = 0.0;
-            value2 = 0.0;
+        findViewById(R.id.button_delete).setOnClickListener(v -> {
+            textResultScreen.setText("");
+            textDisplayScreen.setText("");
+            value1 = 0;
+            value2 = 0;
         });
 
-        buttonDot.setOnClickListener(v -> {
+        findViewById(R.id.button_dot).setOnClickListener(v -> {
             if (decimal) {
                 //do nothing or you can show the error
             } else {
-                editTextScreen.setText(editTextScreen.getText() + ".");
+                textResultScreen.setText(textResultScreen.getText() + ".");
                 decimal = true;
             }
-
         });
 
     }
 
-    private void setNumericOnClickListener() {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button button = (Button) v;
-                editTextScreen.setText(editTextScreen.getText()+""+(button.getText()));
-            }
-        };
-        for (int id : numericButtons) {
-            findViewById(id).setOnClickListener(listener);
-        }
-    }
-
-    private void setOperatorOnClickListener() {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (editTextScreen.getText().length() != 0) {
-                    Button button = (Button) v;
-                    value1 = Float.parseFloat(editTextScreen.getText() + "");
-                    String operator = button.getText()+"";
-                    switch (operator){
-                        case "+":
-                            addition = true;
-                            decimal = false;
-                            editTextScreen.setText(null);
-                            break;
-                        case "-":
-                            subtract = true;
-                            decimal = false;
-                            editTextScreen.setText(null);
-                            break;
-                        case "*":
-                            multiplication = true;
-                            decimal = false;
-                            editTextScreen.setText(null);
-                            break;
-                        case "/":
-                            division = true;
-                            decimal = false;
-                            editTextScreen.setText(null);
-                            break;
-                        case "%":
-                            remainder = true;
-                            decimal = false;
-                            editTextScreen.setText(null);
-                            break;
-
-                    }
-                }
-            }
-        };
-        for (int id : operatorButtons) {
-            findViewById(id).setOnClickListener(listener);
-        }
-    }
-
     private void add(double value1, double value2){
-        editTextScreen.setText(value1 + value2 + "");
-        StringBuilder result = new StringBuilder();
-        result.append(value1).append(" + ").append(value2).append(" = ").append(value1+value2);
-        Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
+        textResultScreen.setText(value1 + value2 + "");
+        String result = value1 + " + " + value2 + " = " +(value1+value2);
+        Toast.makeText(getApplicationContext(), result,Toast.LENGTH_LONG).show();
         addition = false;
     }
 
     private void subtract(double value1, double value2){
-        editTextScreen.setText(value1 - value2 + "");
-        StringBuilder result = new StringBuilder();
-        result.append(value1).append(" - ").append(value2).append(" = ").append(value1-value2);
-        Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
+        textResultScreen.setText(value1 - value2 + "");
+        String result = value1 + " - " + value2 + " = " +(value1-value2);
+        Toast.makeText(getApplicationContext(), result,Toast.LENGTH_LONG).show();
         subtract = false;
     }
 
     private void multiply(double value1, double value2){
-        editTextScreen.setText(value1 * value2 + "");
-        StringBuilder result = new StringBuilder();
-        result.append(value1).append(" x ").append(value2).append(" = ").append(value1*value2);
-        Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
+        textResultScreen.setText(value1 * value2 + "");
+        String result = value1 + " * " + value2 + " = " +(value1*value2);
+        Toast.makeText(getApplicationContext(), result,Toast.LENGTH_LONG).show();
         multiplication = false;
     }
 
     private void divide(double value1, double value2){
         if(value2 == 0){
-            editTextScreen.setText("Can't be divided by zero");
+            textResultScreen.setText("Can't be divided by zero");
             Toast.makeText(getApplicationContext(), "Can't be divided by zero",Toast.LENGTH_LONG).show();
         }
         else{
-            editTextScreen.setText(value1 / value2 + "");
-            StringBuilder result = new StringBuilder();
-            result.append(value1).append(" / ").append(value2).append(" = ").append(value1/value2);
-            Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
+            textResultScreen.setText(value1 / value2 + "");
+            String result = value1 + " / " + value2 + " = " +(value1/value2);
+            Toast.makeText(getApplicationContext(), result,Toast.LENGTH_LONG).show();
             division = false;
         }
     }
 
     private void remainder(double value1, double value2){
-        editTextScreen.setText(value1 % value2 + "");
-        StringBuilder result = new StringBuilder();
-        result.append(value1).append(" % ").append(value2).append(" = ").append(value1%value2);
-        Toast.makeText(getApplicationContext(), result.toString(),Toast.LENGTH_LONG).show();
+        textResultScreen.setText(value1 % value2 + "");
+        String result = value1 + " % " + value2 + " = " +(value1%value2);
+        Toast.makeText(getApplicationContext(), result,Toast.LENGTH_LONG).show();
         remainder = false;
     }
 }
